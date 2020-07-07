@@ -1,0 +1,11 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "bookmark-app"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1f33b5ry2bm1g"
+s3_prefix = "bookmark-app"
+region = "us-east-2"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "StackName=bookmarks APIGatewayStageName=Dev"

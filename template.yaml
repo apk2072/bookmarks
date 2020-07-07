@@ -1,0 +1,224 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: Bookmarks - A simple Serverless App using AWS SAM
+Resources:
+  api:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub
+        - Bookmarking App
+        - ResourceName: /bookmarks
+      StageName: !Ref APIGatewayStageName
+      DefinitionBody:
+        swagger: '2.0'
+        info: {}
+        paths:
+          /bookmarks:
+            get:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${listBookmarks.Arn}/invocations
+              responses: {}
+            post:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${createBookmark.Arn}/invocations
+              responses: {}
+          /bookmarks/{id}:
+            get:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${getBookmark.Arn}/invocations
+              responses: {}
+            put:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${updateBookmark.Arn}/invocations
+              responses: {}
+            delete:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${deleteBookmark.Arn}/invocations
+              responses: {}
+      EndpointConfiguration: REGIONAL
+    Metadata:
+      FinTag: /bookmarks
+  getBookmark:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-getBookmark
+      Description: !Sub
+        - ${StackName} Function ${ResourceName}
+        - ResourceName: getBookmark
+      CodeUri: src/getBookmark
+      Handler: index.handler
+      Runtime: nodejs12.x
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Policies:
+        - AWSXrayWriteOnlyAccess
+        - DynamoDBCrudPolicy:
+            TableName: !Ref bookmarksTable
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref bookmarksTable
+          TABLE_ARN: !GetAtt bookmarksTable.Arn
+      Events:
+        apiGET:
+          Type: Api
+          Properties:
+            Path: /bookmarks/{id}
+            Method: GET
+            RestApiId: !Ref api
+    Metadata:
+      FinTag: getBookmark
+  updateBookmark:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-updateBookmark
+      Description: !Sub
+        - ${StackName} Function ${ResourceName}
+        - ResourceName: updateBookmark
+      CodeUri: src/updateBookmark
+      Handler: index.handler
+      Runtime: nodejs12.x
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Policies:
+        - AWSXrayWriteOnlyAccess
+        - DynamoDBCrudPolicy:
+            TableName: !Ref bookmarksTable
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref bookmarksTable
+          TABLE_ARN: !GetAtt bookmarksTable.Arn
+      Events:
+        apiPUT:
+          Type: Api
+          Properties:
+            Path: /bookmarks/{id}
+            Method: PUT
+            RestApiId: !Ref api
+    Metadata:
+      FinTag: updateBookmark
+  createBookmark:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-createBookmark
+      Description: !Sub
+        - ${StackName} Function ${ResourceName}
+        - ResourceName: createBookmark
+      CodeUri: src/createBookmark
+      Handler: index.handler
+      Runtime: nodejs12.x
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Policies:
+        - AWSXrayWriteOnlyAccess
+        - DynamoDBCrudPolicy:
+            TableName: !Ref bookmarksTable
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref bookmarksTable
+          TABLE_ARN: !GetAtt bookmarksTable.Arn
+      Events:
+        apiPOST:
+          Type: Api
+          Properties:
+            Path: /bookmarks
+            Method: POST
+            RestApiId: !Ref api
+    Metadata:
+      FinTag: createBookmark
+  deleteBookmark:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-deleteBookmark
+      Description: !Sub
+        - ${StackName} Function ${ResourceName}
+        - ResourceName: deleteBookmark
+      CodeUri: src/deleteBookmark
+      Handler: index.handler
+      Runtime: nodejs12.x
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Policies:
+        - AWSXrayWriteOnlyAccess
+        - DynamoDBCrudPolicy:
+            TableName: !Ref bookmarksTable
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref bookmarksTable
+          TABLE_ARN: !GetAtt bookmarksTable.Arn
+      Events:
+        apiDELETE:
+          Type: Api
+          Properties:
+            Path: /bookmarks/{id}
+            Method: DELETE
+            RestApiId: !Ref api
+    Metadata:
+      FinTag: deleteBookmark
+  listBookmarks:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-listBookmarks
+      Description: !Sub
+        - ${StackName} Function ${ResourceName}
+        - ResourceName: listBookmarks
+      CodeUri: src/listBookmarks
+      Handler: index.handler
+      Runtime: nodejs12.x
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Policies:
+        - AWSXrayWriteOnlyAccess
+        - DynamoDBCrudPolicy:
+            TableName: !Ref bookmarksTable
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref bookmarksTable
+          TABLE_ARN: !GetAtt bookmarksTable.Arn
+      Events:
+        apiGETAll:
+          Type: Api
+          Properties:
+            Path: /bookmarks
+            Method: GET
+            RestApiId: !Ref api
+    Metadata:
+      FinTag: listBookmarks
+  bookmarksTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+      TableName: !Sub ${AWS::StackName}-bookmarksTable
+    Metadata:
+      FinTag: Bookmarks
+Parameters:
+  StackName:
+    Type: String
+    Description: Stack Name (injected at deployment time)
+  APIGatewayStageName:
+    Type: String
+    Description: Environment name used for API Gateway Stage names (injected at deployment time)
