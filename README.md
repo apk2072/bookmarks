@@ -4,13 +4,22 @@ This app is to create a simple serverless based app which will cover crud operat
 
 **Services used:**
 
-- API Gateway: It will have GET, POST, UPDATE abd DELETE operations.
-- Lambda: 5 lambda functions (create, update, get, delete, list).
-- DynamoDB: A table to store the bookmarks
+- **Amazon API Gateway:** It will have GET, POST, UPDATE and DELETE operations.
+- **AWS Lambda:** Total 5 lambda functions (create, update, get, delete, list) used.
+- **Amazon DynamoDB:** A table to store the bookmarks.
 
-The this application is built based on Serverless
-Application Model (SAM) is defined, you can find the anatomy of the architecture in template.yaml file.
+The Bookmark application is built based on Serverless
+Application Model (SAM) framework, you can find the anatomy of the architecture in the template.yaml file.
 
+**Initial setup**
+
+You will need AWS SAM setup before proceed. Visit the page https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-mac.html for settings.
+
+Clone the source code and run the below command.
+
+```
+sam deploy --guided
+```
 
 **How to use the APIs**
 
@@ -23,11 +32,12 @@ export API_END_POINT=api_gateway_url
 
 ```
 
-**Create a bookmark:**
+**Create a Bookmark:**
+
 ```
 curl --header "Content-Type: application/json" \
 --request POST \
---data '{"id": "uid001", "url": "https://www.aws.training/", "name": "AWS Training Page", "description": "This site carries tons of free aws training courses"}' \
+--data '{"id": "uid001", "url": "https://www.aws.training/", "name": "AWS Training Page", "description": "This site carries tons of free AWS training courses"}' \
 ${API_END_POINT}/bookmarks
 ```
 
@@ -38,19 +48,19 @@ curl --header "Content-Type: application/json" \
 ${API_END_POINT}/bookmarks
 ```
 
-**List Bookmarks:**
+**List all Bookmarks:**
 
 ```
 curl ${API_END_POINT}/bookmarks
 ```
 
-**Get a bookmark:**
+**Get a Bookmark:**
 
 ```
 curl ${API_END_POINT}/bookmarks/uid001
 ```
 
-**Update a bookmark:**
+**Update a Bookmark:**
 
 ```
 curl --header "Content-Type: application/json" \
@@ -59,7 +69,7 @@ curl --header "Content-Type: application/json" \
 ${API_END_POINT}/bookmarks/uid001
 ```
 
-**Delete a bookmark:**
+**Delete a Bookmark:**
 
 ```
 curl --request DELETE ${API_END_POINT}/bookmarks/uid001
