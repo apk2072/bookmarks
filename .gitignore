@@ -1,1 +1,3 @@
 samconfig.toml
+src/createBookmark/node_modules
+src/createBookmark/package-lock.json

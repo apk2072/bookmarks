@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk');
-var dynamodb = new AWS.DynamoDB()
+var AWSXRay = require('aws-xray-sdk');
+var dynamodb = AWSXRay.captureAWSClient(new AWS.DynamoDB());
 
 exports.handler = async message => {
   console.log(message);
@@ -15,6 +16,13 @@ exports.handler = async message => {
         description: { S: bookmark.description }
       }
     };
+    
+    var seg = AWSXRay.getSegment();
+    seg.addAnnotation('uuid', bookmark.id);
+    seg.addAnnotation('url', bookmark.url);
+    
+    seg.addMetadata('url', bookmark.url);
+    seg.addMetadata('name', bookmark.name);
 
     console.log(`Adding bookmark to table ${process.env.TABLE_NAME}`);
     await dynamodb.putItem(params).promise()

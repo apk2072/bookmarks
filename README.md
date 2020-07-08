@@ -74,3 +74,14 @@ ${API_END_POINT}/bookmarks/uid001
 ```
 curl --request DELETE ${API_END_POINT}/bookmarks/uid001
 ```
+
+**Load test script**
+
+```
+for i in $(seq 1 100); do
+    echo "Record no - $i" 
+    export id=uid-$i
+    curl --header "Content-Type: application/json" --request POST --data '{"id": "'$id'", "url": "https://en.wikipedia.org/'$i'", "name": "Wiki page '$i'", "description": "This is wiki page for non-english readers"}' ${API_END_POINT}/bookmarks; 
+    sleep 0;
+done
+```
