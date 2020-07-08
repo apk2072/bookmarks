@@ -1,0 +1,22 @@
+config:
+  target: 'https://lgmz5k3b4i.execute-api.us-east-2.amazonaws.com/Dev'
+  processor: "./fake-bookmarks.js"
+  phases:
+    - duration: 5
+      arrivalRate: 2
+  defaults:
+    headers:
+      x-my-service-auth: '987401838271002188298567'
+scenarios:
+  - flow:
+    # call generateRandomData() to create the bookmark url, name, uid and description
+    - function: "generateRandomData"
+    - post:
+        url: "/bookmarks"
+        json:
+          id: "{{ uid }}"
+          url: "{{ url }}"
+          name: "{{ name }}"
+          description: "{{ description }}"
+    # Print the data we're sending while debugging the script:
+    - log: "Sent a request to /bookmarks with {{ uid }}, {{ url }}, {{ name }}, {{ description }}"

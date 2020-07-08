@@ -1,0 +1,12 @@
+config:
+  target: 'https://lgmz5k3b4i.execute-api.us-east-2.amazonaws.com/Dev'
+  phases:
+    - duration: 2
+      arrivalRate: 1
+  defaults:
+    headers:
+      x-my-service-auth: '987401838271002188298567'
+scenarios:
+  - flow:
+    - get:
+        url: "/bookmarks/uid-1439"

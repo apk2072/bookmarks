@@ -1,10 +1,21 @@
-const AWS = require('aws-sdk');
 var AWSXRay = require('aws-xray-sdk');
+var AWS = AWSXRay.captureAWS(require('aws-sdk'));
 var dynamodb = AWSXRay.captureAWSClient(new AWS.DynamoDB());
 
 exports.handler = async message => {
   console.log(message);
+  
+  //Fail the messages randomly to see those errors in X-Ray tracing. It's for testing only.
+  if(Math.random() < 0.2)
+    throw new Error('An unknown error occurred');
 
+  //Can you throw a different response code other than 200?
+  
+  //Timeout failures about 10%
+  if(Math.random() < 0.15) {
+     await new Promise(resolve => setTimeout(resolve, 10000));
+  };
+  
   if (message.body) {
     let bookmark = JSON.parse(message.body);
     let params = {

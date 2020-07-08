@@ -17,9 +17,16 @@ You will need AWS SAM setup before proceed. Visit the page https://docs.aws.amaz
 
 Clone the source code and run the below command.
 
+_Note: before you build and deploy the project, go to /createBookmark folder and run the following command, there is a dependency:_
+
+`npm i aws-xray-sdk`
+
 ```
 sam deploy --guided
 ```
+
+
+
 
 **How to use the APIs**
 
@@ -78,10 +85,10 @@ curl --request DELETE ${API_END_POINT}/bookmarks/uid001
 **Load test script**
 
 ```
-for i in $(seq 1 100); do
+for i in $(seq 301 300000); do
     echo "Record no - $i" 
     export id=uid-$i
     curl --header "Content-Type: application/json" --request POST --data '{"id": "'$id'", "url": "https://en.wikipedia.org/'$i'", "name": "Wiki page '$i'", "description": "This is wiki page for non-english readers"}' ${API_END_POINT}/bookmarks; 
-    sleep 0;
+    sleep 1;
 done
 ```
