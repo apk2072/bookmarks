@@ -1,4 +1,4 @@
-# A simple Serverless demo using AWS SAM
+# A simple Serverless App using AWS SAM
 
 This app is to create a simple serverless based app which will cover typical crud (create, read, update and delete) operations.
 
@@ -167,6 +167,27 @@ done
 
     We will use *artillery* tool the load testing. You can visit artillery.io for more details. Run the following commands for pumping the load. With the combination of faker libraries and artillery.io, you can effortlessly start loading the data.
 
-    _Faker API documentation - https://www.npmjs.com/package/faker_
+    Install faker library by running following command:
+
+    ```
+    npm i faker
+    ```
+
+    Go to /test folder, open `simple-post.yaml` file and update the target url with your API Gateway endpoint url. Example:
+    
+    `target: 'https://l7svtaxasxxx.execute-api.us-east-2.amazonaws.com/Stage'`
+
+    Change the `duration` and `arrivalRate` numbers based on your need and run the following command.
+
+    ```
+    artillery run simple-post.yaml
+    ```
+
+    Check the DynamoDB table for the new data.
+
+    ---
+    ***Appendix***
+
+    - _Faker API documentation - https://www.npmjs.com/package/faker_
 
 
