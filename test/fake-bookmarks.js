@@ -9,13 +9,13 @@ const Faker = require('faker');
 
 function generateRandomData(userContext, events, done) {
   // generate data with Faker:
-  const uid = `${Faker.name.firstName()}` ; //Faker.String.base64(4);
+  const uid = `${Faker.random.uid()}` ; //Faker.String.base64(4);
   //const url = `${Faker.name.firstName()} ${Faker.name.lastName()}`;
   const url = Faker.internet.url();
   //const name = Faker.internet.domain_word();
-  const name = `${Faker.name.lastName()}`;
+  const name = `${Faker.lorem.word()}`;
   //const url = `${Faker.name.firstName()} ${Faker.name.lastName()}`
-  const description = `${Faker.hacker.phrase()}`;
+  const description = `${Faker.lorem.text()}`;
   // add variables to virtual user's context:
   userContext.vars.uid = uid;
   userContext.vars.name = name;

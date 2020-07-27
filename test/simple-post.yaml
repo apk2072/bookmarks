@@ -1,5 +1,5 @@
 config:
-  target: 'https://lgmz5k3b4i.execute-api.us-east-2.amazonaws.com/Dev'
+  target: 'https://l7svtjik3m.execute-api.us-east-2.amazonaws.com/Stage'
   processor: "./fake-bookmarks.js"
   phases:
     - duration: 5

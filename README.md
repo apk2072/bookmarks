@@ -27,9 +27,7 @@ _Note: before you build and deploy the project, go to /createBookmark folder and
 sam deploy --guided
 ```
 
-
-
-
+---
 **How to use the APIs**
 
 Set a `API_END_POINT` with the following command.
@@ -163,3 +161,12 @@ done
     ```
 
     _Note: Look into xxxx-getSecrete lambda function for the relevant code on how to retrieve secrets for KMS, SSM and Secrets Manager_
+
+    ---
+    **Load testing**
+
+    We will use *artillery* tool the load testing. You can visit artillery.io for more details. Run the following commands for pumping the load. With the combination of faker libraries and artillery.io, you can effortlessly start loading the data.
+
+    _Faker API documentation - https://www.npmjs.com/package/faker_
+
+
