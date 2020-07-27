@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
-Description: Bookmarks - A simple Serverless App using AWS SAM
+Description: Bookmarks - A sample Serverless App using AWS SAM
 Resources:
   api:
     Type: AWS::Serverless::Api
@@ -45,9 +45,16 @@ Resources:
                 type: aws_proxy
                 uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${deleteBookmark.Arn}/invocations
               responses: {}
+          /secret/{id}:
+            get:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${getSecret.Arn}/invocations
+              responses: {}
       EndpointConfiguration: REGIONAL
     Metadata:
-      FinTag: /bookmarks
+      bkTag: /bookmarks
   getBookmark:
     Type: AWS::Serverless::Function
     Properties:
@@ -77,7 +84,7 @@ Resources:
             Method: GET
             RestApiId: !Ref api
     Metadata:
-      FinTag: getBookmark
+      bkTag: getBookmark
   updateBookmark:
     Type: AWS::Serverless::Function
     Properties:
@@ -107,7 +114,7 @@ Resources:
             Method: PUT
             RestApiId: !Ref api
     Metadata:
-      FinTag: updateBookmark
+      bkTag: updateBookmark
   createBookmark:
     Type: AWS::Serverless::Function
     Properties:
@@ -137,7 +144,7 @@ Resources:
             Method: POST
             RestApiId: !Ref api
     Metadata:
-      FinTag: createBookmark
+      bkTag: createBookmark
   deleteBookmark:
     Type: AWS::Serverless::Function
     Properties:
@@ -167,7 +174,7 @@ Resources:
             Method: DELETE
             RestApiId: !Ref api
     Metadata:
-      FinTag: deleteBookmark
+      bkTag: deleteBookmark
   listBookmarks:
     Type: AWS::Serverless::Function
     Properties:
@@ -197,7 +204,7 @@ Resources:
             Method: GET
             RestApiId: !Ref api
     Metadata:
-      FinTag: listBookmarks
+      bkTag: listBookmarks
   bookmarksTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -212,13 +219,58 @@ Resources:
         WriteCapacityUnits: 5
       StreamSpecification:
         StreamViewType: NEW_AND_OLD_IMAGES
-      TableName: !Sub ${AWS::StackName}-bookmarksTable
+      TableName: !Sub ${AWS::StackName}-bookmarks
     Metadata:
-      FinTag: Bookmarks
+      bkTag: Bookmarks
+  
+  getSecret:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-getSecret
+      Description: !Sub
+        - ${ResourceName} Function 
+        - ResourceName: getSecret
+      CodeUri: src/secrets
+      Handler: index.handler
+      Runtime: nodejs12.x
+      MemorySize: 1024
+      Timeout: 15
+      Tracing: Active
+      Policies:
+      - Statement:
+        - Sid: KmsAndSmsReadOnlyPolicy
+          Effect: Allow
+          Action:
+          - kms:Decrypt
+          - kms:GenerateDataKey*
+          - kms:DescribeKey
+          - ssm:GetParameterHistory
+          - ssm:GetParametersByPath
+          - ssm:GetParameters
+          - ssm:GetParameter
+          - secretsmanager:Describe*
+          - secretsmanager:Get*
+          - secretsmanager:List*
+          Resource: '*'
+      Environment:
+        Variables:
+          KMS_SECRET: 'update with your KMS secret id'
+          SSM_SECRET: '/db/secret'
+          SM_USER_ID: 'dbUserId'
+          SM_PASSWORD: 'password'
+      Events:
+        apiGET:
+          Type: Api
+          Properties:
+            Path: /secret/{id}
+            Method: GET
+            RestApiId: !Ref api
+    Metadata:
+      bkTag: getSecret
 Parameters:
   StackName:
     Type: String
-    Description: Stack Name (injected at deployment time)
+    Description: Stack Name
   APIGatewayStageName:
     Type: String
     Description: Environment name used for API Gateway Stage names
