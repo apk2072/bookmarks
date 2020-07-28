@@ -8,24 +8,45 @@ This app is to create a simple serverless based app which will cover typical cru
 - **AWS Lambda:** Total 5 lambda functions (create, update, get, delete, list) used.
 - **Amazon DynamoDB:** A table to store the bookmarks.
 - **AWS X-Ray:** For monitoring and troubleshooting.
-- **KMS and Systems Manager:** To handle secrets.
+- **KMS AWS Systems Manager and AWS Secrets Manager:** To handle secrets.
 
 The Bookmark application is built based on Serverless
-Application Model (SAM) framework, you can find the anatomy of the architecture in the template.yaml file.
+Application Model (SAM) framework, you can find the anatomy of the architecture in the **template.yaml** file.
 
 **Initial setup**
 
 You will need AWS SAM setup before proceed. Visit the page https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-mac.html for settings.
 
-Clone the source code and run the below command.
+Clone the source code.
 
-_Note: before you build and deploy the project, go to /createBookmark folder and run the following command, there is a dependency:_
+```
+git clone https://github.com/apk2072/bookmarks.git
+```
 
-`npm i aws-xray-sdk`
+```
+cd bookmarks
+```
+
+_Note: before you build and deploy the project, go to `/src/createBookmark` folder and run the following command, there is an sdk dependency:_
+
+```
+cd src/createBookmark
+npm i aws-xray-sdk
+```
+
+Change the working folder to /bookamarks and run the sam deploy command.
+
+```
+cd ../..
+```
+
+_Note: If SAM CLI is not installed, you need to setup the SAM before proceeding further. You will find the instructions here on how to install the SAM CLI - https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html_
 
 ```
 sam deploy --guided
 ```
+
+Enter the names wherever there are no defaults, otherwise accept all default values.
 
 ---
 **How to use the APIs**
@@ -189,5 +210,7 @@ done
     ***Appendix***
 
     - _Faker API documentation - https://www.npmjs.com/package/faker_
+    - _Artillery testing tool - https://artillery.io
+    
 
 
