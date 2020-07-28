@@ -8,7 +8,7 @@ This app is to create a simple serverless based app which will cover typical cru
 - **AWS Lambda:** Total 5 lambda functions (create, update, get, delete, list) used.
 - **Amazon DynamoDB:** A table to store the bookmarks.
 - **AWS X-Ray:** For monitoring and troubleshooting.
-- **KMS AWS Systems Manager and AWS Secrets Manager:** To handle secrets.
+- **KMS, AWS Systems Manager and AWS Secrets Manager:** To handle secrets.
 
 The Bookmark application is built based on Serverless
 Application Model (SAM) framework, you can find the anatomy of the architecture in the **template.yaml** file.
@@ -117,6 +117,8 @@ done
 
 ---
 
+***Secrets***
+
 1. **Managing secretes using AWS Key Management Service (KMS)**
 
     This section will show how to encrypt your Lambda environment variables by KMS and store and retrieve secrets (e.g. database credentials) by using AWS Systems Manager Parameter Store (SSM).
@@ -186,9 +188,13 @@ done
     ---
     **Load testing**
 
-    We will use *artillery* tool the load testing. You can visit artillery.io for more details. Run the following commands for pumping the load. With the combination of faker libraries and artillery.io, you can effortlessly start loading the data.
+    We will use *artillery* tool for the load testing. You can visit artillery.io for more details. Run the following commands for sending the load. With the combination of faker libraries and artillery.io, you can effortlessly start loading the data.
 
     Install faker library by running following command:
+
+    ```
+    cd test
+    ```
 
     ```
     npm i faker
@@ -211,6 +217,6 @@ done
 
     - _Faker API documentation - https://www.npmjs.com/package/faker_
     - _Artillery testing tool - https://artillery.io
-    
+
 
 
