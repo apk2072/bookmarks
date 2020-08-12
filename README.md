@@ -186,37 +186,37 @@ done
     _Note: Look into xxxx-getSecrete lambda function for the relevant code on how to retrieve secrets for KMS, SSM and Secrets Manager_
 
     ---
-    **Load testing**
+**Load testing**
 
-    We will use *artillery* tool for the load testing. You can visit artillery.io for more details. Run the following commands for sending the load. With the combination of faker libraries and artillery.io, you can effortlessly start loading the data.
+We will use *artillery* tool for the load testing. You can visit artillery.io for more details. Run the following commands for sending the load. With the combination of faker libraries and artillery.io, you can effortlessly start loading the data.
 
-    Install faker library by running following command:
+Install faker library by running following command:
 
-    ```
-    cd test
-    ```
+```
+cd test
+```
 
-    ```
-    npm i faker
-    ```
+```
+npm i faker
+```
 
-    Go to /test folder, open `simple-post.yaml` file and update the target url with your API Gateway endpoint url. Example:
-    
-    `target: 'https://l7svtaxasxxx.execute-api.us-east-2.amazonaws.com/Stage'`
+Go to /test folder, open `simple-post.yaml` file and update the target url with your API Gateway endpoint url. Example:
 
-    Change the `duration` and `arrivalRate` numbers based on your need and run the following command.
+`target: 'https://l7svtaxasxxx.execute-api.us-east-2.amazonaws.com/Stage'`
 
-    ```
-    artillery run simple-post.yaml
-    ```
+Change the `duration` and `arrivalRate` numbers based on your need and run the following command.
 
-    Check the DynamoDB table for the new data.
+```
+artillery run simple-post.yaml
+```
 
-    ---
-    ***Appendix***
+Check the DynamoDB table for the new data.
 
-    - _Faker API documentation - https://www.npmjs.com/package/faker_
-    - _Artillery testing tool - https://artillery.io
+---
+***Appendix***
+
+- _Faker API documentation - https://www.npmjs.com/package/faker_
+- _Artillery testing tool - https://artillery.io_
 
 
 
